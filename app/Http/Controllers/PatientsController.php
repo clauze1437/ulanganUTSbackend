@@ -14,31 +14,24 @@ class PatientsController extends Controller
      */
     public function index()
     {
-        // menampilkan seluruh data
         $patients = Patient::all();
-
-        // memberikan informasi jumlah seluruh data
         $total = count($patients);
 
         if ($total) {
-            // jika data nya ada
-            $dataAda = [
+            return response()->json([
                 'success' => true,
-                'message' => 'Data is available',
+                'message' => 'Data berhasil ditampilkan',
                 'total' => $total,
                 'data' => $patients
-            ];
-
-            return response()->json($dataAda, 200);
+            ], 200);
         }
 
-        // else, jika data nya kosong
-        $dataEmpty = [
+        $empty = [
             'success' => false,
-            'message' => 'Data is empty'
+            'message' => 'Data tersebut kosong'
         ];
 
-        return response()->json($dataEmpty, 200);
+        return response()->json($empty, 200);
     }
 
     /**
@@ -49,8 +42,7 @@ class PatientsController extends Controller
      */
     public function store(Request $request)
     {
-        // create validation
-        $validation = $request->validate([
+        $validasi = $request->validate([
             'name' => 'required|unique:patients,name',
             'phone' => 'required|numeric',
             'address' => 'required',
@@ -59,12 +51,11 @@ class PatientsController extends Controller
             'out_date_at' => 'nullable'
         ]);
 
-        // menyimpan data ke database
-        $patients = Patient::create($validation);
+        $patients = Patient::create($validasi);
 
         return response()->json([
             'success' => true,
-            'message' => 'Data is added successfully',
+            'message' => 'Data berhasil ditambahkan',
             'data' => $patients
         ], 201);
     }
@@ -77,27 +68,23 @@ class PatientsController extends Controller
      */
     public function show($id)
     {
-        // mencari id
         $patients = Patient::find($id);
 
-        // buat kondisi
         if ($patients) {
-            // jika data berhasil ditampilkan sesuai id yang ada di db
             $success = [
                 'success' => true,
-                'message' => 'id : ' . $id . ' successful appears',
+                'message' => 'id : ' . $id . ' berhasil ditampilkan',
                 'data' => $patients
             ];
 
             return response()->json($success, 200);
         }
 
-        // else, tidak dapat menampilkan data, dikarenakan id tidak sesuai yang ada di db
-        $failed = [
-            'message' => 'Resource not found'
+        $empty = [
+            'message' => 'Data tidak dapat ditemukan'
         ];
 
-        return response()->json($failed, 404);
+        return response()->json($empty, 404);
     }
 
     /**
@@ -109,31 +96,26 @@ class PatientsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // mencari id
         $patients = Patient::find($id);
 
-        // buat kondisi
         if ($patients) {
-            // mengupdate data patients
             $patients->update($request->all());
 
-            // response success => status code (200)
             $success = [
                 'success' => true,
-                'message' => 'id : ' . $id . ' is update successfully',
+                'message' => 'id : ' . $id . ' berhasil di update',
                 'data' => $patients
             ];
 
             return response()->json($success, 200);
         }
 
-        // else, response failed => status code (404)
-        $failed = [
+        $empty = [
             'success' => false,
-            'message' => 'id : ' .  $id . ' not found'
+            'message' => 'id : ' .  $id . ' tidak dapat ditemukan'
         ];
 
-        return response()->json($failed, 404);
+        return response()->json($empty, 404);
     }
 
     /**
@@ -144,113 +126,103 @@ class PatientsController extends Controller
      */
     public function destroy($id)
     {
-        // mencari id
         $patients = Patient::find($id);
 
-        // buat kondisi
         if ($patients) {
-            // menghapus data patients
             $patients->delete();
 
-            // response success => status code (200)
             $success = [
                 'success' => true,
-                'message' => 'id : ' . $id . ' is deleted successfully'
+                'message' => 'id : ' . $id . ' berhasil dihapus'
             ];
 
             return response()->json($success, 200);
         }
 
-        // else, response failed => status code (404)
-        $failed = [
+        $empty = [
             'success' => false,
-            'message' => 'id : ' .  $id . ' not found'
+            'message' => 'id : ' .  $id . ' tidak dapat ditemukan'
         ];
 
-        return response()->json($failed, 404);
+        return response()->json($empty, 404);
     }
 
-    // membuat function status dead
+    # membuat function status dead
     public function dead()
     {
         $patients = Patient::where('status', 'dead')->get();
         $total = count($patients);
 
         if ($total) {
-            $data = [
+            $success = [
                 'success' => true,
-                'message' => 'Get dead resource',
+                'message' => 'Data pasien dengan status dead, berhasil ditampilkan',
                 'total patients' => $total,
                 'data patients' => $patients
             ];
-            return response()->json($data, 200);
+            return response()->json($success, 200);
         }
 
-        $data = [
+        $empty = [
             'success' => false,
-            'message' => 'Data is empty'
+            'message' => 'Data tersebut kosong'
         ];
-        return response()->json($data, 200);
+        return response()->json($empty, 200);
     }
 
-    // membuat function status positive
+    # membuat function status positive
     public function positive()
     {
         $patients = Patient::where('status', 'positive')->get();
         $total = count($patients);
 
         if ($total) {
-            $data = [
+            $success = [
                 'success' => true,
-                'message' => 'Get positive resource',
+                'message' => 'Data pasien dengan status positive, berhasil ditampilkan',
                 'total patients' => $total,
                 'data patients' => $patients
             ];
-            return response()->json($data, 200);
+            return response()->json($success, 200);
         }
 
-        $data = [
+        $empty = [
             'success' => false,
-            'message' => 'Data is empty'
+            'message' => 'Data tersebut kosong'
         ];
-        return response()->json($data, 200);
+        return response()->json($empty, 200);
     }
 
-    // membuat function status recovered
+    # membuat function status recovered
     public function recovered()
     {
         $patients = Patient::where('status', 'recovered')->get();
         $total = count($patients);
 
         if ($total) {
-            $data = [
+            $success = [
                 'success' => true,
-                'message' => 'Get recovered resource',
+                'message' => 'Data pasien dengan status recovered, berhasil ditampilkan',
                 'total patients' => $total,
                 'data patients' => $patients
             ];
-            return response()->json($data, 200);
+            return response()->json($success, 200);
         }
 
-        $data = [
+        $empty = [
             'success' => false,
-            'message' => 'Data is empty'
+            'message' => 'Data tersebut kosong'
         ];
-        return response()->json($data, 200);
+        return response()->json($empty, 200);
     }
 
-    // membuat function search
+    # membuat function search
     public function search($name)
     {
-        // mencari dan menampilkan data berdasarkan nama yang di cari
         $patients = Patient::where('name', 'like', '%' . $name . '%')->get();
-
-        // memberikan informasi jumlah seluruh data
         $total = count($patients);
 
-        // buat kondisi
         if ($total) {
-            // success, jika ada data yang berdasarkan nama yang di cari
             $success = [
                 'success' => true,
                 'message' => 'Get searched resource',
@@ -261,10 +233,9 @@ class PatientsController extends Controller
             return response()->json($success, 200);
         }
 
-        // else, jika nama yang di cari tidak ada di db
         $failed = [
             'success' => false,
-            'message' => 'Resource not found'
+            'message' => 'Data tidak dapat ditemukan'
         ];
 
         return response()->json($failed, 404);
