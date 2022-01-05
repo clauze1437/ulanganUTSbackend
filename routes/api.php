@@ -23,9 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('patients', PatientsController::class);
 
 // Route untuk menampilkan data berdasarkan status positive, recovered dan dead
-Route::get('/patients/status/positive', [PatientController::class, 'positive']);
-Route::get('/patients/status/recovered', [PatientController::class, 'recovered']);
-Route::get('/patients/status/dead', [PatientController::class, 'dead']);
+Route::get('/patients/status/positive', [PatientsController::class, 'positive']);
+Route::get('/patients/status/recovered', [PatientsController::class, 'recovered']);
+Route::get('/patients/status/dead', [PatientsController::class, 'dead']);
 
 // Route untuk mencari data berdasarkan name
 Route::get('/patients/search/{name}', [PatientsController::class, 'search']);

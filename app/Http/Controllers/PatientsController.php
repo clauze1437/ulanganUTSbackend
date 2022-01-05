@@ -81,6 +81,7 @@ class PatientsController extends Controller
         }
 
         $empty = [
+            'success' => false,
             'message' => 'Data tidak dapat ditemukan'
         ];
 
